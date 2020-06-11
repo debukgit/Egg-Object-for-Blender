@@ -1,7 +1,7 @@
 # Egg-Object-for-Blender 1.0
 
 <img src="images/eggsforblender.png">
-Creates a parametric egg Object in the Add Memi -> Mesh-> Essentials -> Egg
+Creates a parametric egg Object in the Add Menu -> Mesh-> Essentials -> Egg
 
 
 # Installation

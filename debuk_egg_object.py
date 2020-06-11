@@ -153,7 +153,7 @@ def register():
 
 
 def unregister():
-    bpy.utils.register_class(Add_Egg_Menu)
+    bpy.utils.unregister_class(Add_Egg_Menu)
     bpy.utils.unregister_class(Add_Egg)
     bpy.types.VIEW3D_MT_mesh_add.remove(egg_menu)
 

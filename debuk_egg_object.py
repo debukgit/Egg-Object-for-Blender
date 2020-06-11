@@ -3,7 +3,7 @@ bl_info = {
     "name": "Egg Object",
     "description": "Creates an Egg",
     "author": "Debuk",
-    "version": (1, 0, 0),
+    "version": (1, 0, 1),
     'license': 'GPL v3',
     "blender": (2, 80, 0),
     "support": "COMMUNITY",
@@ -31,10 +31,10 @@ def generate_Egg(radialScale, height, ringFaces, heightFaces):
         for i in range(radialFElements):
             u = (2 * math.pi) * (i / (radialFElements))
             v = (math.pi) * (j / (heightFElements))
-            x = ((radialScale * 0.52 ) + 0.2 * v) * math.cos(u) * math.sin(v) * height
-            y = ((radialScale * 0.52 ) + 0.2 * v) * math.sin(u) * math.sin(v) * height
-            z = height * math.cos(v)
-            verts.append(Vector((x , y ,z)))
+            x = ((radialScale * 0.52 ) + 0.2 * v) * math.cos(u) * math.sin(v) * height * 0.5
+            y = ((radialScale * 0.52 ) + 0.2 * v) * math.sin(u) * math.sin(v) * height * 0.5
+            z = height * 0.5 * math.cos(v)
+            verts.append(Vector((x , y , z)))
     for j in range(heightFElements):
         for i in range( radialFElements):
             a = i % radialFElements
@@ -120,7 +120,7 @@ class Add_Egg(bpy.types.Operator):
                 f.use_smooth = True
 
         # Normal calculation
-        # self.calcNormals(mesh)
+        self.calcNormals(mesh)
         mesh.update()
 
         eggObj = bpy.data.objects.new(mesh.name, mesh)

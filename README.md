@@ -5,6 +5,16 @@ Creates a parametric egg as mesh object
 
 Go to Add Menu -> Mesh-> Essentials -> Egg
 
+# Buy me a coffee
+
+Hej, I offer this addon for free, but if you can afford it, you can support me and buy me a coffee on ko-fi. If you can't afford it, don't worry. Anyway I hope you enjoy this addon. 
+
+Stay healthy!
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I2I31T92M)
+
+Thanky you! 
+
 
 # Installation
 

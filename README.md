@@ -33,5 +33,4 @@ V 1.1.0
   - New Settings
     - Toggle for Smooth or Flat Shading
     - Optimized Poles ( less vertices and smoother shading at the poles )
-  - Fixed Dimensions
   - Including UV Generation now! 

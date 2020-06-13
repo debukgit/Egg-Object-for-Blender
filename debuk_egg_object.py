@@ -3,7 +3,7 @@ bl_info = {
     "name": "Egg Object",
     "description": "Creates an Egg",
     "author": "Debuk",
-    "version": (1, 0, 1),
+    "version": (1, 1, 0),
     'license': 'GPL v3',
     "blender": (2, 80, 0),
     "support": "COMMUNITY",
@@ -27,6 +27,7 @@ def generate_Egg(radialScale, height, ringFaces, heightFaces):
 
     heightFElements= heightFaces
     radialFElements = ringFaces
+
     for j in range(heightFElements+1):
         for i in range(radialFElements):
             u = (2 * math.pi) * (i / (radialFElements))
@@ -41,9 +42,7 @@ def generate_Egg(radialScale, height, ringFaces, heightFaces):
             b = (i + 1)  % radialFElements
             r1 = radialFElements*j
             r2 = radialFElements*(j+1)
-            faces.append([r1+a, r1+b, r2+b, r2+a])
-
-
+            faces.append([r1 + a, r2 + a, r2 + b, r1 + b])
     return verts, edges, faces
 
 class Add_Egg_Menu(bpy.types.Menu):
@@ -68,6 +67,7 @@ class Add_Egg(bpy.types.Operator):
         default=16,
         min=4,
         soft_min=4,
+        soft_max=300,
         step=1
     )
 
@@ -77,6 +77,7 @@ class Add_Egg(bpy.types.Operator):
         default=20,
         min = 4,
         soft_min=4,
+        soft_max=300,
         step=1
     )
 
@@ -104,8 +105,12 @@ class Add_Egg(bpy.types.Operator):
         default=False,
     )
 
+    optimizePoles: BoolProperty(
+        name="Optimize Poles",
+        description="",
+        default=False,
+    )
     def execute(self, context):
-
         verts, edges, faces = generate_Egg(
             radialScale=self.radialScale,
             height=self.height,
@@ -121,16 +126,43 @@ class Add_Egg(bpy.types.Operator):
 
         # Normal calculation
         self.calcNormals(mesh)
+        # Uvs
+        self.generate_UVs(
+            mesh,
+            ringFaces=self.ringFaces,
+            heightFaces=self.heightFaces
+        )
+
         mesh.update()
 
         eggObj = bpy.data.objects.new(mesh.name, mesh)
         col = bpy.data.collections.get("Collection")
         col.objects.link(eggObj)
         bpy.context.view_layer.objects.active = eggObj
-        # Missing shading hack
+
         bpy.ops.object.mode_set(mode='EDIT')
+        if self.optimizePoles:
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.mesh.remove_doubles()
         bpy.ops.object.mode_set(mode='OBJECT')
+
+
+
+
         return {'FINISHED'}
+
+    def generate_UVs(self, mesh, ringFaces,heightFaces):
+
+        uvlayer = mesh.uv_layers.new()
+        mesh.uv_layers.active = uvlayer
+
+        for face in mesh.polygons:
+            for idx, (vert_idx, loop_idx) in enumerate(zip(face.vertices, face.loop_indices)):
+                x = vert_idx % (ringFaces)
+                y = vert_idx // (ringFaces)
+                if (x==0) and (idx > 1):
+                    x=ringFaces
+                uvlayer.data[loop_idx].uv = (x / (ringFaces)  , 1.0 - (y /(heightFaces)))
 
     def calcNormals(self, mesh):
         bm = bmesh.new()

@@ -1,4 +1,4 @@
-# Egg-Object-for-Blender 1.0.1
+# Egg-Object-for-Blender 1.1.0
 
 <img src="images/eggsforblender.png">
 Creates a parametric egg as mesh object 

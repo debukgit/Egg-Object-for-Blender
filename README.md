@@ -7,7 +7,7 @@ Go to Add Menu -> Mesh-> Essentials -> Egg
 
 # Buy me a coffee
 
-Hej, I offer this addon for free, but if you can afford it, you can support me and buy me a coffee on ko-fi. If you can't afford it, don't worry. Anyway I hope you enjoy this addon. 
+Hej, I offer this addon for free, but if you like it, you can support me and buy me a coffee on ko-fi. If you can't afford it, don't worry, as I said it's free. Anyway I hope you enjoy this addon. 
 
 Stay healthy!
 

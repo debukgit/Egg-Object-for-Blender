@@ -3,7 +3,7 @@ bl_info = {
     "name": "Egg Object",
     "description": "Creates an Egg",
     "author": "Debuk",
-    "version": (1, 1, 0),
+    "version": (1, 1, 1),
     'license': 'GPL v3',
     "blender": (2, 80, 0),
     "support": "COMMUNITY",
@@ -136,8 +136,7 @@ class Add_Egg(bpy.types.Operator):
         mesh.update()
 
         eggObj = bpy.data.objects.new(mesh.name, mesh)
-        col = bpy.data.collections.get("Collection")
-        col.objects.link(eggObj)
+        bpy.context.collection.objects.link(eggObj)
         bpy.context.view_layer.objects.active = eggObj
 
         bpy.ops.object.mode_set(mode='EDIT')

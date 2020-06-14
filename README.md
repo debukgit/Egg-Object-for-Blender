@@ -32,5 +32,9 @@ V 1.0.1
 V 1.1.0
   - New Settings
     - Toggle for Smooth or Flat Shading
+  - New Features 
     - Optimized Poles ( less vertices and smoother shading at the poles )
-  - Including UV Generation now! 
+    - Automatic UV Generation
+    
+V 1.0.1 
+   - Fix: Adding new eggs to the active collection

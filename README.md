@@ -36,5 +36,5 @@ V 1.1.0
     - Optimized Poles ( less vertices and smoother shading at the poles )
     - Automatic UV Generation
     
-V 1.0.1 
+V 1.1.1 
    - Fix: Adding new eggs to the active collection

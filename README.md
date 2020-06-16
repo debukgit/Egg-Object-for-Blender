@@ -1,4 +1,4 @@
-# Egg-Object-for-Blender 1.1.0
+# Egg-Object-for-Blender 1.2.0
 
 <img src="images/eggsforblender.png">
 Creates a parametric egg as mesh object 
@@ -38,3 +38,7 @@ V 1.1.0
     
 V 1.1.1 
    - Fix: Adding new eggs to the active collection
+   
+V 1.2.0
+   - New Features
+     - ...

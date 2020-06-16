@@ -3,7 +3,7 @@ bl_info = {
     "name": "Egg Object",
     "description": "Creates an Egg",
     "author": "Debuk",
-    "version": (1, 1, 1),
+    "version": (1, 2, 0),
     'license': 'GPL v3',
     "blender": (2, 80, 0),
     "support": "COMMUNITY",
@@ -18,6 +18,9 @@ from bpy.props import (
     IntProperty,
     BoolProperty
 )
+import random
+
+cracksWidth = 0.1
 
 def generate_Egg(radialScale, height, ringFaces, heightFaces):
 
@@ -44,6 +47,39 @@ def generate_Egg(radialScale, height, ringFaces, heightFaces):
             r2 = radialFElements*(j+1)
             faces.append([r1 + a, r2 + a, r2 + b, r1 + b])
     return verts, edges, faces
+
+
+def generate_Egg_Headed(radialScale, height, ringFaces, heightFaces, headedStart):
+
+    verts = []
+    edges = []
+    faces = []
+
+    heightFElements= heightFaces
+    radialFElements = ringFaces
+
+
+
+    for j in range(heightFElements+1):
+        for i in range(radialFElements):
+
+            u = (2 * math.pi) * (i / (radialFElements))
+            v = (headedStart* math.pi) + ((math.pi) * (j / (heightFElements)) * (1-headedStart))
+            if j==0:
+                v -= random.random() * (cracksWidth)
+            x = ((radialScale * 0.52 ) + 0.2 * v) * math.cos(u) * math.sin(v) * height * 0.5
+            y = ((radialScale * 0.52 ) + 0.2 * v) * math.sin(u) * math.sin(v) * height * 0.5
+            z = height * 0.5 * math.cos(v)
+            verts.append(Vector((x , y , z)))
+    for j in range(heightFElements):
+        for i in range( radialFElements):
+            a = i % radialFElements
+            b = (i + 1)  % radialFElements
+            r1 = radialFElements*j
+            r2 = radialFElements*(j+1)
+            faces.append([r1 + a, r2 + a, r2 + b, r1 + b])
+    return verts, edges, faces
+
 
 class Add_Egg_Menu(bpy.types.Menu):
     bl_label = "Essentials"
@@ -102,22 +138,85 @@ class Add_Egg(bpy.types.Operator):
     shadeSmooth: BoolProperty(
         name="Shade Smooth",
         description="",
-        default=False,
+        default=True,
     )
 
     optimizePoles: BoolProperty(
         name="Optimize Poles",
         description="",
+        default=True,
+    )
+
+    isCracked: BoolProperty(
+        name="Cracked",
+        description="",
         default=False,
     )
-    def execute(self, context):
-        verts, edges, faces = generate_Egg(
-            radialScale=self.radialScale,
-            height=self.height,
-            ringFaces=self.ringFaces,
-            heightFaces=self.heightFaces,
 
-        )
+    hasThickness: BoolProperty(
+        name="Thickness",
+        description="",
+        default=False,
+    )
+
+    headedStart: FloatProperty(
+        name = " Headed Start ",
+        description = "Percentage of the egg being headed",
+        default = cracksWidth,
+        min = cracksWidth,
+        soft_min = cracksWidth,
+        max=1.0,
+        soft_max=1.0,
+        step = 0.1
+    )
+
+    def draw(self, context):
+        layout = self.layout
+
+        faceBox = layout.box()
+        faceBox.label(text = "Faces")
+        faceBox.prop(context.object, "headedStart")
+        faceBox.prop(self, "ringFaces")
+        faceBox.prop(self, "heightFaces")
+        faceBox.prop(self, "optimizePoles")
+        faceBox.prop(self, "shadeSmooth")
+
+        sizebox = layout.box()
+        sizebox.label(text = "Size")
+        sizebox.prop(self, "height")
+        sizebox.prop(self, "radialScale")
+
+        breakbox = layout.box()
+        breakbox.label(text = "Break the egg")
+        breakbox.prop(self, "isCracked")
+        col = breakbox.box()
+        col.prop(self, "hasThickness")
+        col.prop(self, "headedStart")
+
+        if self.isCracked:
+            col.enabled = True
+        else:
+            col.enabled = False
+            self.hasThickness = False
+
+    def execute(self, context):
+
+
+        if self.isCracked:
+            verts, edges, faces = generate_Egg_Headed(
+                radialScale=self.radialScale,
+                height=self.height,
+                ringFaces=self.ringFaces,
+                heightFaces=self.heightFaces,
+                headedStart= self.headedStart
+            )
+        else:
+            verts, edges, faces = generate_Egg(
+                radialScale=self.radialScale,
+                height=self.height,
+                ringFaces=self.ringFaces,
+                heightFaces=self.heightFaces,
+            )
         mesh = bpy.data.meshes.new("Egg")
         mesh.from_pydata(verts, edges, faces)
         if self.shadeSmooth:
@@ -145,8 +244,9 @@ class Add_Egg(bpy.types.Operator):
             bpy.ops.mesh.remove_doubles()
         bpy.ops.object.mode_set(mode='OBJECT')
 
-
-
+        if self.isCracked and self.hasThickness:
+            bpy.ops.object.modifier_add(type='SOLIDIFY')
+            bpy.context.object.data.use_auto_smooth = True
 
         return {'FINISHED'}
 

@@ -40,5 +40,11 @@ V 1.1.1
    - Fix: Adding new eggs to the active collection
    
 V 1.2.0
-   - New Features
-     - ...
+   - New Features:
+     - break the egg option
+       - controllable cut height
+       - randomized cuts 
+     - with or without thickness
+   - new Redo Panel Layout
+   
+<img src="images/update 1.2.0.png">
